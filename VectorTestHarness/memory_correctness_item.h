@@ -1,20 +1,12 @@
 #pragma once
 
-#include <iostream>
-
 class MemoryCorrectnessItem
 {
 public:
-    constexpr static bool verbose = false;
-
     MemoryCorrectnessItem(int id = 0) : id(id)
     {
-        if constexpr (verbose)
-            std::cout << "Constructed id " << id << " at " << (void*)this << std::endl;
         if (memory_initialization_token == 0x2c1dd27f0d59cf3e && status != MemoryStatus::Deleted)
         {
-            std::cout << "ERROR! Construction in already initialized memory at " << (void *) (this) << std::endl;
-            print_memory_status();
             errors_occurred += 1;
         }
         status = MemoryStatus::Constructed;
@@ -26,28 +18,20 @@ public:
     {
         if (other.memory_initialization_token != 0x2c1dd27f0d59cf3e)
         {
-            std::cout << "ERROR! Use of uninitialized memory while copy constructing from " << (void *) (&other)
-                      << std::endl;
             errors_occurred += 1;
         }
         if (other.status == MemoryStatus::Deleted)
         {
-            std::cout << "ERROR! Copy constructing from deleted memory at " << (void *) (&other) << std::endl;
             errors_occurred += 1;
         }
         if (other.status == MemoryStatus::MovedFrom)
         {
-            std::cout << "ERROR! Copy constructing from moved-from memory at " << (void *) (&other) << std::endl;
             errors_occurred += 1;
         }
         if (memory_initialization_token == 0x2c1dd27f0d59cf3e && status != MemoryStatus::Deleted)
         {
-            std::cout << "ERROR! Copy construction in already initialized memory at " << (void *) (this) << std::endl;
-            print_memory_status();
             errors_occurred += 1;
         }
-        if constexpr (verbose)
-            std::cout << "Copy constructed id " << id << " from " << (void*)(&other) << " at " << (void*)this << std::endl;
         status = MemoryStatus::Constructed;
         memory_initialization_token = 0x2c1dd27f0d59cf3e;
         count_constructed_copy += 1;
@@ -57,29 +41,22 @@ public:
     {
         if (other.memory_initialization_token != 0x2c1dd27f0d59cf3e)
         {
-            std::cout << "ERROR! Use of uninitialized memory while move constructing from " << (void*)(&other) << std::endl;
             errors_occurred += 1;
         }
         if (other.status == MemoryStatus::Deleted)
         {
-            std::cout << "ERROR! Move constructing from deleted memory at " << (void *) (&other) << std::endl;
             errors_occurred += 1;
         }
         if (other.status == MemoryStatus::MovedFrom)
         {
-            std::cout << "ERROR! Move constructing from moved-from memory at " << (void *) (&other) << std::endl;
             errors_occurred += 1;
         }
         if (memory_initialization_token == 0x2c1dd27f0d59cf3e && status != MemoryStatus::Deleted)
         {
-            std::cout << "ERROR! Move construction in already initialized memory at " << (void *) (this) << std::endl;
-            print_memory_status();
             errors_occurred += 1;
         }
         other.id = -1;
         other.status = MemoryStatus::MovedFrom;
-        if constexpr (verbose)
-            std::cout << "Move constructed id " << id << " from " << (void*)(&other) << " at " << (void*)this << std::endl;
         status = MemoryStatus::Constructed;
         memory_initialization_token = 0x2c1dd27f0d59cf3e;
         count_constructed_move += 1;
@@ -89,28 +66,21 @@ public:
     {
         if (other.memory_initialization_token != 0x2c1dd27f0d59cf3e)
         {
-            std::cout << "ERROR! Use of uninitialized memory while copy assigning from " << (void *) (&other)
-                      << std::endl;
             errors_occurred += 1;
         }
         if (other.status == MemoryStatus::Deleted)
         {
-            std::cout << "ERROR! Copy assigning from deleted memory at " << (void *) (&other) << std::endl;
             errors_occurred += 1;
         }
         if (other.status == MemoryStatus::MovedFrom)
         {
-            std::cout << "ERROR! Copy assigning from moved-from memory at " << (void *) (&other) << std::endl;
             errors_occurred += 1;
         }
         if (memory_initialization_token != 0x2c1dd27f0d59cf3e)
         {
-            std::cout << "ERROR! Use of uninitialized memory while copy assigning to " << (void *) (this) << std::endl;
             errors_occurred += 1;
         }
         id = other.id;
-        if constexpr (verbose)
-            std::cout << "Copy assigning id " << id << " from " << (void*)(&other) << " to " << (void*)this << std::endl;
         count_assigned_copy += 1;
         return *this;
     }
@@ -119,46 +89,35 @@ public:
     {
         if (other.memory_initialization_token != 0x2c1dd27f0d59cf3e)
         {
-            std::cout << "ERROR! Use of uninitialized memory while move assigning from " << (void *) (&other)
-                      << std::endl;
             errors_occurred += 1;
         }
         if (other.status == MemoryStatus::Deleted)
         {
-            std::cout << "ERROR! Move assigning from deleted memory at " << (void *) (&other) << std::endl;
             errors_occurred += 1;
         }
         if (other.status == MemoryStatus::MovedFrom)
         {
-            std::cout << "ERROR! Move assigning from moved-from memory at " << (void *) (&other) << std::endl;
             errors_occurred += 1;
         }
         if (memory_initialization_token != 0x2c1dd27f0d59cf3e)
         {
-            std::cout << "ERROR! Use of uninitialized memory while move assigning to " << (void *) (this) << std::endl;
             errors_occurred += 1;
         }
         id = other.id;
         other.id = -1;
         other.status = MemoryStatus::MovedFrom;
-        if constexpr (verbose)
-            std::cout << "Move assigning id " << id << " from " << (void*)(&other) << " to " << (void*)this << std::endl;
         count_assigned_move += 1;
         return *this;
     }
 
     ~MemoryCorrectnessItem()
     {
-        if constexpr (verbose)
-            std::cout << "Deleting id " << id << " at " << (void*)(this) << std::endl;
         if (memory_initialization_token != 0x2c1dd27f0d59cf3e)
         {
-            std::cout << "ERROR! Use of uninitialized memory while deleting at " << (void *) (this) << std::endl;
             errors_occurred += 1;
         }
         if (status == MemoryStatus::Deleted)
         {
-            std::cout << "ERROR! Double delete detected at " << (void *) (this) << std::endl;
             errors_occurred += 1;
         }
         status = MemoryStatus::Deleted;
@@ -187,14 +146,6 @@ public:
         "MovedFrom",
         "Deleted"
     };
-
-    void print_memory_status()
-    {
-        if ((int)status >= 0 && (int)status <= 3)
-            std::cout << "The memory status was: " << MemoryStatusNames[(int)status] << std::endl;
-        else
-            std::cout << "The memory status was: " << (int)status << std::endl;
-    }
 
     volatile MemoryStatus status;
     volatile uint64_t memory_initialization_token;
