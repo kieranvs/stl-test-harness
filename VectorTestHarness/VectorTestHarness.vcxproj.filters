@@ -18,10 +18,16 @@
     <ClInclude Include="memory_correctness_item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tests.h">
+    <ClInclude Include="tests_vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="counted_malloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests_unique_ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,5 @@
-#include "tests.h"
+#include "tests_vector.h"
+#include "tests_unique_ptr.h"
 
 template <typename T>
 struct my_vec

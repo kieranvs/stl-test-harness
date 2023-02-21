@@ -6,6 +6,7 @@
 
 #include "memory_correctness_item.h"
 #include "counted_malloc.h"
+#include "tests_common.h"
 
 template <typename Vec, typename T> concept has_push_back = requires(Vec v) { v.push_back(T{}); };
 template <typename Vec> concept has_size = requires(Vec v) { { v.size() } -> std::same_as<size_t>; };
@@ -18,15 +19,6 @@ template <typename Vec, typename T> concept has_operator_sq_bk = requires(Vec v)
 template <typename Vec, typename T> concept has_at = requires(Vec v) { { v.at(0) } -> std::convertible_to<T>; };
 template <typename Vec, typename T> concept has_front = requires(Vec v) { { v.front() } -> std::same_as<T&>; };
 template <typename Vec, typename T> concept has_back = requires(Vec v) { { v.back() } -> std::same_as<T&>; };
-
-enum class TestResult
-{
-	IncorrectResults,
-	LeaksMemory,
-	IncorrectObjectHandling,
-	SuboptimalObjectHandling,
-	Pass
-};
 
 template <template <typename> class Vec>
 TestResult test_push_back()
@@ -502,27 +494,8 @@ TestResult test_move_assignment()
 	return TestResult::Pass;
 }
 
-void output_result(const char* name, TestResult result)
-{
-	if (result == TestResult::Pass)
-		printf("  %s: \033[32mpass\033[0m\n", name);
-	else if (result == TestResult::SuboptimalObjectHandling)
-		printf("  %s: \033[32mpass, suboptimal copies/moves\033[0m\n", name);
-	else if (result == TestResult::IncorrectObjectHandling)
-		printf("  %s: \033[33mincorrect object handling\033[0m\n", name);
-	else if (result == TestResult::LeaksMemory)
-		printf("  %s: \033[33mleaks memory\033[0m\n", name);
-	else if (result == TestResult::IncorrectResults)
-		printf("  %s: \033[31mfail\033[0m\n", name);
-}
-
-void output_warning(const char* name, const char* warning)
-{
-	printf("  %s: \033[33m%s\033[0m\n", name, warning);
-}
-
 template <template <typename> class Vec>
-void run_tests()
+void run_tests_vector()
 {
 	using VecInt = Vec<int>;
 

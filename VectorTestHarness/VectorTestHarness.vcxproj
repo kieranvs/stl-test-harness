@@ -143,7 +143,9 @@
   <ItemGroup>
     <ClInclude Include="counted_malloc.h" />
     <ClInclude Include="memory_correctness_item.h" />
-    <ClInclude Include="tests.h" />
+    <ClInclude Include="tests_common.h" />
+    <ClInclude Include="tests_unique_ptr.h" />
+    <ClInclude Include="tests_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="counted_malloc.cpp" />
