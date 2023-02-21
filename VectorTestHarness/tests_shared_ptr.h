@@ -423,12 +423,18 @@ void run_tests_shared_ptr()
 		output_warning("destructor", "can't test, missing requirements: constructor (pointer)");
 
 	if constexpr (std::copy_constructible<SharedPtr<int>>)
-		output_result("copy constructor", test_copy_constructor<SharedPtr>());
+		if constexpr (has_constructor_ptr<SharedPtr<int>, int>)
+			output_result("copy constructor", test_copy_constructor<SharedPtr>());
+		else
+			output_warning("copy constructor", "can't test, missing requirements: constructor (pointer)");
 	else
 		output_warning("copy constructor", "not implemented");
 
 	if constexpr (std::assignable_from<SharedPtr<int>&, SharedPtr<int>&> || std::assignable_from<SharedPtr<int>&, const SharedPtr<int>&> || std::assignable_from<SharedPtr<int>&, const SharedPtr<int>>)
-		output_result("copy assignment", test_copy_assignment<SharedPtr>());
+		if constexpr (has_constructor_ptr<SharedPtr<int>, int>)
+			output_result("copy assignment", test_copy_assignment<SharedPtr>());
+		else
+			output_warning("copy assignment", "can't test, missing requirements: constructor (pointer)");
 	else
 		output_warning("copy assignment", "not implemented");
 
