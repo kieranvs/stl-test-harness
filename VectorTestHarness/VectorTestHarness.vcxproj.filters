@@ -30,6 +30,9 @@
     <ClInclude Include="tests_unique_ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tests_shared_ptr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
