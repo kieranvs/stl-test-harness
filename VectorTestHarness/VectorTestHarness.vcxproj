@@ -141,11 +141,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="counted_malloc.h" />
     <ClInclude Include="memory_correctness_item.h" />
     <ClInclude Include="tests.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="counted_malloc.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="memory_correctness_item.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

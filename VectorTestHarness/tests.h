@@ -5,38 +5,7 @@
 #include <stdexcept>
 
 #include "memory_correctness_item.h"
-
-size_t counted_malloc_allocations = 0;
-size_t counted_malloc_deallocations = 1;
-
-void* counted_malloc(size_t sz)
-{
-	counted_malloc_allocations += 1;
-	return malloc(sz);
-}
-
-void counted_free(void* ptr)
-{
-	counted_malloc_deallocations += 1;
-	free(ptr);
-}
-
-void counted_malloc_reset()
-{
-	counted_malloc_allocations = 0;
-	counted_malloc_deallocations = 0;
-}
-
-#define malloc(x) counted_malloc(x)
-#define free(x) counted_free(x)
-
-uint64_t MemoryCorrectnessItem::count_constructed = 0;
-uint64_t MemoryCorrectnessItem::count_constructed_copy = 0;
-uint64_t MemoryCorrectnessItem::count_constructed_move = 0;
-uint64_t MemoryCorrectnessItem::count_assigned_copy = 0;
-uint64_t MemoryCorrectnessItem::count_assigned_move = 0;
-uint64_t MemoryCorrectnessItem::count_destroyed = 0;
-uint64_t MemoryCorrectnessItem::errors_occurred = 0;
+#include "counted_malloc.h"
 
 template <typename Vec, typename T> concept has_push_back = requires(Vec v) { v.push_back(T{}); };
 template <typename Vec> concept has_size = requires(Vec v) { { v.size() } -> std::same_as<size_t>; };
