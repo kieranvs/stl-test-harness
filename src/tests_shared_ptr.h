@@ -9,6 +9,9 @@
 #include "counted_malloc.h"
 #include "tests_common.h"
 
+namespace tests_shared_ptr
+{
+
 template <typename UP, typename T> concept has_constructor_ptr = requires(T * tp) { UP{ tp }; };
 template <typename UP, typename T> concept has_constructor_default = requires { UP{}; };
 template <typename UP, typename T> concept has_reset = requires(UP u, T * t) { u.reset(t); };
@@ -401,7 +404,7 @@ TestResult test_use_count()
 }
 
 template <template <typename> class SharedPtr>
-void run_tests_shared_ptr()
+void run()
 {
 	printf("\n%s\n-------------------------------\n", typeid(SharedPtr).name());
 
@@ -500,4 +503,6 @@ void run_tests_shared_ptr()
 		output_warning("use_count", "not implemented");
 
 	printf("\n");
+}
+
 }

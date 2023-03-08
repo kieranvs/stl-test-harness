@@ -8,6 +8,9 @@
 #include "counted_malloc.h"
 #include "tests_common.h"
 
+namespace tests_vector
+{
+
 template <typename Vec, typename T> concept has_push_back = requires(Vec v) { v.push_back(T{}); };
 template <typename Vec> concept has_size = requires(Vec v) { { v.size() } -> std::same_as<size_t>; };
 template <typename Vec> concept has_capacity = requires(Vec v) { { v.capacity() } -> std::same_as<size_t>; };
@@ -495,7 +498,7 @@ TestResult test_move_assignment()
 }
 
 template <template <typename> class Vec>
-void run_tests_vector()
+void run()
 {
 	using VecInt = Vec<int>;
 
@@ -660,4 +663,6 @@ void run_tests_vector()
 	// 	output_warning("clean up (growth)", "can't test, missing requirements: push_back");
 
 	printf("\n");
+}
+
 }

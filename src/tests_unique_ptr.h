@@ -8,6 +8,9 @@
 #include "counted_malloc.h"
 #include "tests_common.h"
 
+namespace tests_unique_ptr
+{
+
 template <typename UP, typename T> concept has_constructor_ptr = requires(T* tp) { UP{ tp }; };
 template <typename UP, typename T> concept has_constructor_val = requires(T&& tp) { UP{ std::move(tp) }; };
 template <typename UP, typename T> concept has_constructor_default = requires { UP{}; };
@@ -289,7 +292,7 @@ TestResult test_operator_arrow()
 }
 
 template <template <typename> class UniquePtr>
-void run_tests_unique_ptr()
+void run()
 {
 	printf("\n%s\n-------------------------------\n", typeid(UniquePtr).name());
 
@@ -387,4 +390,6 @@ void run_tests_unique_ptr()
 		output_warning("operator->", "not implemented");
 
 	printf("\n");
+}
+
 }
